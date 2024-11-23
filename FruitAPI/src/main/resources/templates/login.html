@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<h1>Login</h1>
+<form th:action="@{/public/login}" method="get">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required /><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required /><br>
+
+    <button type="submit">Login</button>
+</form>
+
+<!-- Display token if available -->
+<div th:if="${token}">
+    <p>JWT Token: <span th:text="${token}"></span></p>
+</div>
+
+<!-- Display error if available -->
+<div th:if="${error}">
+    <p style="color: red;" th:text="${error}"></p>
+</div>
+</body>
+</html>

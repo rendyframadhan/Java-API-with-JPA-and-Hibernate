@@ -1,0 +1,4 @@
+com\technicaltest\fruitservice\dto\FruitDto.class
+com\technicaltest\fruitservice\dto\UpdateOrDeleteFruitRequest$UpdateOrDeleteFruitRequestBuilder.class
+com\technicaltest\fruitservice\dto\FruitDto$FruitDtoBuilder.class
+com\technicaltest\fruitservice\dto\UpdateOrDeleteFruitRequest.class
