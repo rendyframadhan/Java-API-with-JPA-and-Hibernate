@@ -62,4 +62,9 @@ public class FruitServiceController {
     public FruitBaseResponse deleteFruit(@RequestBody DeleteFruitRequest request){
         return fruitManagementService.deleteFruit(request);
     }
+
+    @PostMapping("/getallfruit")
+    public List<Fruit> getAllFruit(){
+        return fruitManagementService.getAllFruit();
+    }
 }

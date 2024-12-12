@@ -6,8 +6,14 @@ import com.technicaltest.fruitservice.dto.StoreFruitRequest;
 import com.technicaltest.fruitservice.dto.UpdateFruitRequest;
 import com.technicaltest.fruitservice.model.Fruit;
 import com.technicaltest.fruitservice.repository.FruitRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +26,7 @@ import java.util.Optional;
 public class FruitManagementService {
 
     private final FruitRepository fruitRepository;
+    private  final EntityManager entityManager;
 
     public List<Fruit> getFruitList(){
         List<Fruit> list = new ArrayList<>();
@@ -30,6 +37,17 @@ public class FruitManagementService {
         }
 
         return list;
+    }
+
+    public  List<Fruit> getAllFruit(){
+        List<Fruit> fruit = new ArrayList<>();
+        try {
+            fruit = findFruit();
+        } catch (Exception e){
+            log.error("Error when getAllFruit");
+        }
+
+        return fruit;
     }
 
     public FruitBaseResponse insertFruit(StoreFruitRequest request){
@@ -102,6 +120,25 @@ public class FruitManagementService {
         }
 
         return response;
+    }
+
+
+    public List<Fruit> findFruit(){
+        // Get CriteriaBuilder from Entity Manager
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        // Create Criteria Query From Fruit Model
+        CriteriaQuery<Fruit> query = cb.createQuery(Fruit.class);
+        Root<Fruit> root = query.from(Fruit.class);
+
+        query.where(cb.equal(root.get("isDeleted"), false));
+        query.orderBy(cb.asc(root.get("fruitName")));
+        //Predicate namePredicate = cb.equal(root.get("fruitName"), "Jambu2");
+
+        query.select(root);
+
+        return entityManager.createQuery(query).getResultList();
+
     }
 
 }
