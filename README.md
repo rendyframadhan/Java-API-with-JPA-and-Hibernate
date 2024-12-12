@@ -1,2 +1,2 @@
 # JWT
-Java CRUD with JWT implemented
+Java CRUD using Hibernate and JPA with JWT implemented
