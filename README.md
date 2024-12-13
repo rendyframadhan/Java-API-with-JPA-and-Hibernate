@@ -1,2 +1,7 @@
-# JWT
-Java CRUD using Hibernate and JPA with JWT implemented
+# Java API include :
+- CRUD using Hibernate and JPA
+- JWT Token.
+
+Tools :
+- Maven
+- PostgreSQL 
