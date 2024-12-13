@@ -1,8 +1,10 @@
 package com.javaapi.fruitservice.service.management;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaapi.fruitservice.dto.*;
 import com.javaapi.fruitservice.model.Fruit;
 import com.javaapi.fruitservice.repository.FruitRepository;
+import com.javaapi.fruitservice.util.ResponseUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -23,7 +25,6 @@ public class FruitManagementService {
 
     private final FruitRepository fruitRepository;
     private  final EntityManager entityManager;
-
     private static final String FRUIT_NAME = "fruitName";
     private static final String IS_DELETED = "isDeleted";
 
@@ -112,15 +113,18 @@ public class FruitManagementService {
         return response;
     }
 
-    public  List<Fruit> getAllFruit(GetFruitRequest request){
-        List<Fruit> fruit = new ArrayList<>();
+    public  BaseResponseDto<List<Fruit>> getAllFruit(GetFruitRequest request){
+        BaseResponseDto<List<Fruit>> response = new BaseResponseDto<>();
+        List<Fruit> fruit;
         try {
             fruit = findFruit(request.getFruitName());
+            response = ResponseUtil.constructBaseResponse(fruit);
         } catch (Exception e){
             log.error("Error when getAllFruit", e);
+            return ResponseUtil.constructErrorResponse("Failed to retrieve fruits: " + e.getMessage());
         }
 
-        return fruit;
+        return response;
     }
 
     public List<Fruit> findFruit(String fruitName) {

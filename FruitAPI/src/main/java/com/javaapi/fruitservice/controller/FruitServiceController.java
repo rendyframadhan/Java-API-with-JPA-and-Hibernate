@@ -61,7 +61,7 @@ public class FruitServiceController {
     }
 
     @PostMapping("/getallfruit")
-    public List<Fruit> getAllFruit(@RequestBody GetFruitRequest request){
+    public BaseResponseDto<List<Fruit>> getAllFruit(@RequestBody GetFruitRequest request){
         return fruitManagementService.getAllFruit(request);
     }
 }
