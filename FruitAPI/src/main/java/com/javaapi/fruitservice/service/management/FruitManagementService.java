@@ -1,6 +1,5 @@
 package com.javaapi.fruitservice.service.management;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javaapi.fruitservice.dto.*;
 import com.javaapi.fruitservice.model.Fruit;
 import com.javaapi.fruitservice.repository.FruitRepository;
@@ -21,6 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@SuppressWarnings("all")
 public class FruitManagementService {
 
     private final FruitRepository fruitRepository;
