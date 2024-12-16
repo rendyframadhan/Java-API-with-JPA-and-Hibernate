@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.technicaltest</groupId>
 	<artifactId>FruitAPI</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<name>FruitAPI</name>
 	<description>Demo project for Technical Test</description>
 	<url/>
