@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +28,6 @@ public class FruitManagementService {
     private  final EntityManager entityManager;
     private static final String FRUIT_NAME = "fruitName";
     private static final String IS_DELETED = "isDeleted";
-
     private static final String ALL = "ALL";
 
     public List<Fruit> getFruitList(){
@@ -113,12 +113,17 @@ public class FruitManagementService {
         return response;
     }
 
-    public  BaseResponseDto<List<Fruit>> getAllFruit(GetFruitRequest request){
-        BaseResponseDto<List<Fruit>> response = new BaseResponseDto<>();
+    public  BaseResponseDto<List<FruitResponseDto>> getAllFruit(GetFruitRequest request){
+        BaseResponseDto<List<FruitResponseDto>> response = new BaseResponseDto<>();
         List<Fruit> fruit;
         try {
             fruit = findFruit(request.getFruitName());
-            response = ResponseUtil.constructBaseResponse(fruit);
+            List<FruitResponseDto> fruitList = fruit.stream()
+                    .map(fruits -> new FruitResponseDto(fruits.getId(), fruits.getFruitName()))
+                    .distinct()
+                    .collect(Collectors.toList());
+
+            response = ResponseUtil.constructBaseResponse(fruitList);
         } catch (Exception e){
             log.error("Error when getAllFruit", e);
             return ResponseUtil.constructErrorResponse("Failed to retrieve fruits: " + e.getMessage());
