@@ -1,7 +1,11 @@
 # Java API include :
 - CRUD using Hibernate and JPA
-- JWT Token.
+- JWT Token
+- Stream List
 
 Tools :
 - Maven
-- PostgreSQL 
+- PostgreSQL
+
+
+- Will update any other features furthermore
