@@ -11,9 +11,12 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -114,6 +117,7 @@ public class FruitManagementService {
     }
 
     public  BaseResponseDto<List<FruitResponseDto>> getAllFruit(GetFruitRequest request){
+        log.info("Start getAllFruit");
         BaseResponseDto<List<FruitResponseDto>> response = new BaseResponseDto<>();
         List<Fruit> fruit;
         try {
@@ -154,6 +158,30 @@ public class FruitManagementService {
 
         // Execute the query and return the result
         return entityManager.createQuery(query).getResultList();
+    }
+
+    /**
+     * Implement Pagination
+     * @return Page of Fruit
+     */
+    public PagedResponse<Fruit> findFruitPage(FindFruitPageRequest request){
+        PagedResponse response = new PagedResponse<Fruit>();
+        try {
+            Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+            Page<Fruit> fruits = fruitRepository.findByIsDeleted(pageable, false);
+            log.info("fruits data : {}", fruits);
+            response = PagedResponse.<Fruit>builder()
+                    .content(fruits.getContent())
+                    .totalPages(fruits.getTotalPages())
+                    .totalElements(fruits.getTotalElements())
+                    .currentPage(fruits.getNumber())
+                    .size(fruits.getSize())
+                    .build();
+        } catch (Exception e){
+            log.error("Error when findFruitPage", e);
+            throw e;
+        }
+        return response;
     }
 
 }

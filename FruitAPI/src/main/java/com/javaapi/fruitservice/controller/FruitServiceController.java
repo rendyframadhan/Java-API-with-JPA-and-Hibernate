@@ -4,7 +4,10 @@ import com.javaapi.fruitservice.dto.*;
 import com.javaapi.fruitservice.service.management.FruitManagementService;
 import com.javaapi.fruitservice.model.Fruit;
 import com.javaapi.fruitservice.util.JwtUtil;
+import com.javaapi.fruitservice.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,5 +66,10 @@ public class FruitServiceController {
     @PostMapping("/getallfruit")
     public BaseResponseDto<List<FruitResponseDto>> getAllFruit(@RequestBody GetFruitRequest request){
         return fruitManagementService.getAllFruit(request);
+    }
+
+    @PostMapping("/getallfruitpage")
+    public PagedResponse<Fruit> getPaginatedFruit(@RequestBody FindFruitPageRequest request){
+        return fruitManagementService.findFruitPage(request);
     }
 }
