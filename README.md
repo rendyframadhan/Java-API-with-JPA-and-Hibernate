@@ -2,6 +2,7 @@
 - CRUD using Hibernate and JPA
 - JWT Token
 - Stream List
+- Pagination
 
 Tools :
 - Maven
