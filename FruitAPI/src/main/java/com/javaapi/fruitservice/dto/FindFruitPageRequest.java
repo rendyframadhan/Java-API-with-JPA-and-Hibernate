@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FindFruitPageRequest {
 
-    private int page;
-    private int size;
+    private Integer pageNumber;
+    private Integer sizeData;
+    private String sortBy;
+    private String direction;
 }

@@ -14,9 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -161,15 +161,17 @@ public class FruitManagementService {
     }
 
     /**
-     * Implement Pagination
+     * Sampling Pagination
      * @return Page of Fruit
      */
     public PagedResponse<Fruit> findFruitPage(FindFruitPageRequest request){
         PagedResponse response = new PagedResponse<Fruit>();
         try {
-            Pageable pageable = PageRequest.of(request.getPage(), request.getSize());
+            Sort sort =Sort.by(Sort.Direction.valueOf(request.getDirection()), request.getSortBy());
+            Pageable pageable = PageRequest.of(request.getPageNumber(), request.getSizeData(), sort);
             Page<Fruit> fruits = fruitRepository.findByIsDeleted(pageable, false);
             log.info("fruits data : {}", fruits);
+
             response = PagedResponse.<Fruit>builder()
                     .content(fruits.getContent())
                     .totalPages(fruits.getTotalPages())
