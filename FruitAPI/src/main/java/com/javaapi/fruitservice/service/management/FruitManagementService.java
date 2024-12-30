@@ -11,6 +11,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.javaapi.fruitservice.constant.FruitApiConstant.ALL;
+import static com.javaapi.fruitservice.constant.FruitApiConstant.FRUIT_NAME;
+import static com.javaapi.fruitservice.constant.FruitApiConstant.IS_DELETED;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,9 +35,6 @@ public class FruitManagementService {
 
     private final FruitRepository fruitRepository;
     private  final EntityManager entityManager;
-    private static final String FRUIT_NAME = "fruitName";
-    private static final String IS_DELETED = "isDeleted";
-    private static final String ALL = "ALL";
 
     public List<Fruit> getFruitList(){
         List<Fruit> list = new ArrayList<>();
@@ -167,7 +170,12 @@ public class FruitManagementService {
     public PagedResponse<Fruit> findFruitPage(FindFruitPageRequest request){
         PagedResponse response = new PagedResponse<Fruit>();
         try {
-            Sort sort =Sort.by(Sort.Direction.valueOf(request.getDirection()), request.getSortBy());
+            String directionToUppercase = request.getDirection().toUpperCase(Locale.ROOT);
+            String direction = StringUtils.isEmpty(request.getDirection())
+                    ? Sort.Direction.ASC.name()
+                    : Sort.Direction.valueOf(directionToUppercase).name();
+
+            Sort sort = Sort.by(Sort.Direction.valueOf(direction), request.getSortBy());
             Pageable pageable = PageRequest.of(request.getPageNumber(), request.getSizeData(), sort);
             Page<Fruit> fruits = fruitRepository.findByIsDeleted(pageable, false);
             log.info("fruits data : {}", fruits);
